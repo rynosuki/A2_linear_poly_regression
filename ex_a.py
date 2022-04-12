@@ -27,10 +27,11 @@ plt.show()
 #Ex _ 2
 Xe = np.c_[np.ones((len(X[:,0]),1)), X[:,1], X[:,2]]
 y = X[:,0]
-print(y.shape)
+# print(y.shape)
 
 #Ex _ 3
 beta = normal_eq(Xe, y)
+print(beta)
 model = np.dot(Xe, beta)
 # print(model[2])
 
@@ -42,7 +43,7 @@ Xe = np.c_[np.ones((len(X[:,0]))), x1, x2]
 #Ex _ 5
 beta = normal_eq(Xe, y)
 model = Xe.dot(beta)
-
+print(model[2])
 #Ex _ 6
 # print(cost_eq(Xe, beta, y))
 
@@ -51,7 +52,7 @@ beta = [18.50, 0.303, 0.388]
 for n in range(30):
   beta = gradient_eq(Xe, beta, y, 0.002)
   plt.plot(n, cost_eq(Xe, beta, y), "ro")
-print(cost_eq(Xe, beta, y))
+# print(cost_eq(Xe, beta, y))
 plt.show()
-print("Suitable alpha and N would be alpha = 0.002 and N = 30")
-print(Xe.dot(beta)[2])
+# print("Suitable alpha and N would be alpha = 0.002 and N = 30")
+# print(Xe.dot(beta)[2])

@@ -43,16 +43,16 @@ print("E - 3", np.dot([1, 2432, 1607, 1683, 8, 8, 256], beta))
 # E _ 4
 J = cost_eq(Xe, beta, y)
 print("E - 4", J)
-# Cost = 15518
+# Cost = 12.39
 
 # E _ 5
 beta = [0,0,0,0,0,0,0]
 for n in range(1000):
   beta = gradient_eq(Xe, beta, y, 0.000000015)
-  print(beta)
+  print(cost_eq(Xe, beta, y))
   plt.plot(n, cost_eq(Xe, beta, y), "ro")
 plt.show()
 print("E - 5 Cost =",cost_eq(Xe, beta, y))
 print("E - 5 Benchmark =", np.dot([1, 2432, 1607, 1683, 8, 8, 256], beta))
-# Cost approx 30.39, could go down to 28 with alot more calculations
-# Benchmark predicted to 146876
+# Cost approx 227.218, could go down to 28 with alot more calculations
+# Benchmark predicted to 92.64

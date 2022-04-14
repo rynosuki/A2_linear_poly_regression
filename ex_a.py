@@ -33,7 +33,7 @@ y = X[:,0]
 beta = normal_eq(Xe, y)
 print(beta)
 model = np.dot(Xe, beta)
-# print(model[2])
+print(model[2])
 
 #Ex _ 4
 x1 = normalized(X[:,1])

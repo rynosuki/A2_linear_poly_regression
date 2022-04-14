@@ -18,14 +18,17 @@ def main():
   Xe = np.c_[np.ones([len(Xn[:,0]), 1]), Xn[:,0], Xn[:,1]]
   beta = np.array([0,0,0])
   assy = np.dot(Xe, beta)
-  print(cost_eq(y, assy))
-    
-  for n in range(2000):
-    beta = gradient_eq(beta, Xe, 0.5, np.dot(Xe,beta), y)
-  print(beta)
+  print(cost_eq(Xe, y, assy))
+  
+  # test_X = np.array([[0,1],[2,3]])
+  # print(sigmoid_eq(test_X))
+
+  for n in range(1):
+    beta = gradient_eq(beta, 0.5, Xe, y)
+  print(cost_eq(Xe, y, np.dot(Xe, beta)))
   
   S = np.array([45,85])
-  Sn = (S-np.mean(S))/np.std(S)
+  Sn = (S-np.mean(X))/np.std(X)
   Sne = np.c_[1,Sn[0],Sn[1]]
   prob = sigmoid_eq(np.dot(Sne, beta))
   print("Adm. prob. for scores %i, %i is %0.2f" % (S[0],S[1],prob[0]))
@@ -75,14 +78,17 @@ def normalize_eq(X):
   sigma = np.std(X)
   return (X - mu) / sigma
 
+@njit
+def gradient_eq(beta, alpha, X, y):
+  return beta - (alpha / len(X))*(X.T).dot(sigmoid_eq(np.dot(X, beta.astype(np.float64))) - y)
+
+@njit
 def sigmoid_eq(z):
-  return 1/(1 + np.e**(-z))
+  return 1/(1 + np.exp(-z))
 
-def gradient_eq(beta, X, alpha, sig, y):
-  return beta - (alpha/len(X))*(X.T.dot(sigmoid_eq(sig) - y))
-
-def cost_eq(y, Xn):
-  return -(1/len(Xn))*((y.T.dot(np.log(sigmoid_eq(Xn)))) + (1-y).T.dot(np.log(1-sigmoid_eq(Xn))))
+@njit
+def cost_eq(Xn, y, xb):
+  return - ((1/len(Xn))*(y.T.dot(np.log(sigmoid_eq(xb))) + (1-y).T.dot(np.log(1-sigmoid_eq(xb)))))
 
 if __name__ == "__main__":
   main()

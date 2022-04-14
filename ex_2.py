@@ -60,8 +60,8 @@ for i in values:
 beta = normal_eq(polys[3].astype(np.float32), y)
 print(np.dot([1, 47, 47**2, 47**3, 47**4],beta))
 # He bought at index 568 and would now be worth 797
-# print(2.3e+6*(797/568))
-# The house would be worth 3.227 million SEK in 2022
+# print(2.3e+6*(798/568))
+# The house would be worth 3.231 million SEK in 2022
 
 
 #### Calculations with gradient.
@@ -89,7 +89,7 @@ for n in range(250):
   beta = gradient_eq(polys[3], beta, y, 0.0041)
   values.append(cost_eq(polys[3], beta, y))
   
-print("For d:1 alpha =", 0.003, "with n of", 50)
-print("For d:2 alpha =", 0.0015, "with n of", 50)
-print("For d:3 alpha =", 0.0095, "with n of", 250)
-print("For d:4 alpha =", 0.0041, "with n of", 250)
+print("For d:1 alpha =", 0.003, "with n of", 50, "value:", values[0])
+print("For d:2 alpha =", 0.0015, "with n of", 50, "value:", values[1])
+print("For d:3 alpha =", 0.0095, "with n of", 250, "value:", values[2])
+print("For d:4 alpha =", 0.0041, "with n of", 250, "value:", values[3])

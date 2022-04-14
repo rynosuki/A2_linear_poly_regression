@@ -1,20 +1,7 @@
 import numpy as np
 from numpy.linalg import inv
 import matplotlib.pyplot as plt
-
-def normalized(Xi):
-  mu = np.mean(Xi)
-  omega = np.std(Xi)
-  return (Xi - mu) / omega
-
-def normal_eq(Xe, y):
-  return inv(np.dot(Xe.T,Xe)).dot(Xe.T).dot(y)
-
-def cost_eq(Xe, beta, y):
-  return ((np.dot(Xe,beta)- y).T.dot(np.dot(Xe,beta) - y))/len(Xe)
-
-def gradient_eq(Xe, beta, y, alpha):
-  return beta - np.dot(alpha,Xe.T).dot(np.dot(Xe,beta) - y)
+import lin_reg as lin
 
 X = np.genfromtxt("girls_height.csv", dtype = np.float64, delimiter="	")
 
@@ -30,29 +17,29 @@ y = X[:,0]
 # print(y.shape)
 
 #Ex _ 3
-beta = normal_eq(Xe, y)
+beta = lin.normal_eq(Xe, y)
 print(beta)
 model = np.dot(Xe, beta)
 print(model[2])
 
 #Ex _ 4
-x1 = normalized(X[:,1])
-x2 = normalized(X[:,2])
+x1 = lin.normalize_eq(X[:,1])
+x2 = lin.normalize_eq(X[:,2])
 Xe = np.c_[np.ones((len(X[:,0]))), x1, x2]
 
 #Ex _ 5
-beta = normal_eq(Xe, y)
+beta = lin.normal_eq(Xe, y)
 model = Xe.dot(beta)
 print(model[2])
 #Ex _ 6
-# print(cost_eq(Xe, beta, y))
+# print(lin.cost_lin(Xe, beta, y))
 
 #Ex _ 7
 beta = [18.50, 0.303, 0.388]
 for n in range(30):
-  beta = gradient_eq(Xe, beta, y, 0.002)
-  plt.plot(n, cost_eq(Xe, beta, y), "ro")
-# print(cost_eq(Xe, beta, y))
+  beta = lin.gradient_lin(Xe, beta, y, 0.002)
+  plt.plot(n, lin.cost_lin(Xe, beta, y), "ro")
+# print(lin.cost_lin(Xe, beta, y))
 plt.show()
 # print("Suitable alpha and N would be alpha = 0.002 and N = 30")
 # print(Xe.dot(beta)[2])

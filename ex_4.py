@@ -1,15 +1,40 @@
 import numpy as np
-from numba import njit
+from numba import njit, prange
 import matplotlib.pyplot as plt
-from ex_3 import cost_eq, sigmoid_eq, gradient_eq, training_errors
+import lin_reg as lin
 
 def main():
   data = np.genfromtxt("microchips.csv", delimiter=",")
-  plt.scatter(data[:,0], data[:,1], c = data[:,2])
+  X1 = data[:,0]
+  X2 = data[:,1]
+  y = data[:,2]
+  # plt.scatter(X1, X2, c = y)
+  # plt.show()
+  X = lin.mapFeature(X1, X2, 2)
+  beta = np.array([0,0,0,0,0,0])
+  
+  fig, (ax1,ax2) = plt.subplots(1,2)
+  
+  # for n in range(10000):
+  #   beta = lin.gradient_log(beta, 5, X, y)
+  #   ax1.scatter(n, lin.cost_log(X, y, beta), c = "none", edgecolors="red")
+  
+  # lin.plot_grid(X1, X2, beta, y)
+  # print(beta)
+  
+  # print("Training errors:", lin.training_errors(X, beta, y))
+  
+  X = lin.mapFeature(X1, X2, 5)
+  print(X)
+  beta = np.array(np.zeros(X.shape[1]))
+  print(beta)
+  beta = calc_gradient(X, y, beta, 10000)
+
+def calc_gradient(X, y, beta, n):
+  for i in range(n):
+    beta = lin.gradient_log(beta, 10, X, y)
+    plt.scatter(i, lin.cost_log(X, y, beta), c="red")
+    # print(lin.cost_log(X, y, beta))
   plt.show()
-  print(data[:,0], "\n", data[:,1])
-  print(np.dot(np.dot(data[:,0], data[:,1]),[1,2,3,4,5,6]))
-  # X = np.c_[np.zeros([len(data[:,0]),1]), data[:,0], data[:,1], data[:,0]**2, np.matmul(data[:,0], data[:,1]), data[:,1]**2]
-  # print(X)
 
 main()

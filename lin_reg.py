@@ -3,23 +3,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numba import njit
 
-@njit
 def cost_log(X, y, beta):
-  return - (1/len(X)*(y.T.dot(np.log(sigmoid_log(np.dot(X, beta.astype(np.float64))))) + (1-y).T.dot(np.log(1-sigmoid_log(np.dot(X, beta.astype(np.float64)))))))
+  return - (1/len(X)*(y.T.dot(np.log(sigmoid_log(np.dot(X, beta)))) + (1-y).T.dot(np.log(1-sigmoid_log(np.dot(X, beta))))))
 
-@njit
 def cost_lin(X, beta, y):
-  return ((np.dot(X,beta.astype(X.dtype))- y).T.dot(np.dot(X,beta.astype(X.dtype)) - y))/len(X)
+  return ((np.dot(X,beta)- y).T.dot(np.dot(X,beta) - y))/len(X)
 
-@njit
 def gradient_log(beta, alpha, X, y):
-  return beta - (alpha / len(X))*(X.T).dot(sigmoid_log(np.dot(X, beta.astype(np.float64))) - y)
+  return beta - (alpha / len(X))*(X.T).dot(sigmoid_log(np.dot(X, beta)) - y)
 
-@njit
 def gradient_lin(beta, alpha, X, y):
-  return beta.astype(X.dtype) - np.dot(alpha,X.T).dot(np.dot(X,beta.astype(X.dtype)) - y)
+  return beta - np.dot(alpha,X.T).dot(np.dot(X,beta) - y)
 
-@njit
 def sigmoid_log(z):
   return 1/(1 + np.exp(-z))
 
@@ -54,16 +49,16 @@ def mapFeature(X1,X2,D): # Pyton
       Xe = np.append(Xe,Xnew,1) # axis = 1 ==> append column
   return Xe
 
-def plot_grid(X1, X2, beta, y):
+def plot_grid(X1, X2, beta, y, poly, plot):
   min_x, max_x = min(X1), max(X1)
   min_y, max_y = min(X2), max(X2)
   grid_size = 200
-  x_axis = np.linspace(min_x, max_x, grid_size)
-  y_axis = np.linspace(min_y, max_y, grid_size)
+  x_axis = np.linspace(min_x - 0.1, max_x + 0.1, grid_size)
+  y_axis = np.linspace(min_y - 0.1, max_y + 0.1, grid_size)
   
   xx, yy = np.meshgrid(x_axis, y_axis)
   x1, x2 = xx.ravel(), yy.ravel()
-  XXe = mapFeature(x1, x2, 2)
+  XXe = mapFeature(x1, x2, poly)
   
   p = sigmoid_log(np.dot(XXe, beta))
   classes = p > 0.5
@@ -72,7 +67,6 @@ def plot_grid(X1, X2, beta, y):
   cmap_light = ListedColormap(['#FFAAAA', '#AAFFAA', '#AAAAFF'])
   cmap_bold = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
   
-  plt.figure(1)
-  plt.pcolormesh(xx,yy,clz_mesh, cmap=cmap_light)
-  plt.scatter(X1, X2,c=y, marker='.', cmap=cmap_bold)
-  plt.show()
+  plot.pcolormesh(xx,yy,clz_mesh, cmap=cmap_light)
+  plot.scatter(X1, X2,c=y, marker='.', cmap=cmap_bold)
+  return plot

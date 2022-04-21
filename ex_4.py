@@ -14,27 +14,31 @@ def main():
   beta = np.array([0,0,0,0,0,0])
   
   fig, (ax1,ax2) = plt.subplots(1,2)
+  alpha = 5
+  beta = calc_gradient(X, y, beta, 10000, alpha, ax1)
   
-  # for n in range(10000):
-  #   beta = lin.gradient_log(beta, 5, X, y)
-  #   ax1.scatter(n, lin.cost_log(X, y, beta), c = "none", edgecolors="red")
-  
-  # lin.plot_grid(X1, X2, beta, y)
-  # print(beta)
-  
-  # print("Training errors:", lin.training_errors(X, beta, y))
+  lin.plot_grid(X1, X2, beta, y, 2, ax2)
+  plt.show()
+  print("alpha:", alpha, "N:", 10000)
+  print("Training errors:", lin.training_errors(X, beta, y))
   
   X = lin.mapFeature(X1, X2, 5)
-  print(X)
   beta = np.array(np.zeros(X.shape[1]))
-  print(beta)
-  beta = calc_gradient(X, y, beta, 10000)
-
-def calc_gradient(X, y, beta, n):
-  for i in range(n):
-    beta = lin.gradient_log(beta, 10, X, y)
-    plt.scatter(i, lin.cost_log(X, y, beta), c="red")
-    # print(lin.cost_log(X, y, beta))
+  
+  fig, (ax1,ax2) = plt.subplots(1,2)
+  alpha = 15
+  beta = calc_gradient(X, y, beta, 100000, alpha, ax1)
+  lin.plot_grid(X1, X2, beta, y, 5, ax2)
   plt.show()
+  print("alpha:", alpha, "N:", 100000)
+  print("Training errors:", lin.training_errors(X, beta, y))
+
+def calc_gradient(X, y, beta, n, alpha, plot):
+  values = []
+  for i in range(n):
+    beta = lin.gradient_log(beta, alpha, X, y)
+    values.append(lin.cost_log(X,y,beta))
+  plot.plot(range(n), values, "ro")
+  return beta
 
 main()

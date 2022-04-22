@@ -1,3 +1,4 @@
+from tkinter import ON
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
 import numpy as np
@@ -39,9 +40,12 @@ def training_errors(X, beta, y):
   yy = y.reshape(-1,1)
   return np.sum(yy!=pp)
 
-def mapFeature(X1,X2,D): # Pyton
-  one = np.ones([len(X1),1])
-  Xe = np.c_[one,X1,X2] # Start with [1,X1,X2]
+def mapFeature(X1,X2,D, Ones=True): # Pyton
+  if Ones:
+    one = np.ones([len(X1),1])
+    Xe = np.c_[one,X1,X2] # Start with [1,X1,X2]
+  else:
+    Xe = np.c_[X1,X2] # Start with [1,X1,X2]
   for i in range(2,D+1):
     for j in range(0,i+1):
       Xnew = X1**(i-j)*X2**j # type (N)
@@ -70,3 +74,24 @@ def plot_grid(X1, X2, beta, y, poly, plot):
   plot.pcolormesh(xx,yy,clz_mesh, cmap=cmap_light)
   plot.scatter(X1, X2,c=y, marker='.', cmap=cmap_bold)
   return plot
+
+def plot_grid_sklearn(X1, X2, y, plot, lg, poly):
+  min_x, max_x = min(X1), max(X1)
+  min_y, max_y = min(X2), max(X2)
+  grid_size = 200
+  x_axis = np.linspace(min_x - 0.1, max_x + 0.1, grid_size)
+  y_axis = np.linspace(min_y - 0.1, max_y + 0.1, grid_size)
+  
+  xx, yy = np.meshgrid(x_axis, y_axis)
+  x1, x2 = xx.ravel(), yy.ravel()
+  XXe = mapFeature(x1, x2, poly, Ones=False)
+
+  p = lg.predict_proba(XXe)
+  classes = p[:,0] > 0.5
+  clz_mesh = classes.reshape(xx.shape)
+  
+  cmap_light = ListedColormap(['#FFAAAA', '#AAFFAA', '#AAAAFF'])
+  cmap_bold = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
+  
+  plot.pcolormesh(xx,yy,clz_mesh, cmap=cmap_light)
+  plot.scatter(X1, X2,c=y, marker='.', cmap=cmap_bold)

@@ -27,11 +27,8 @@ def main():
     
     for n in range(10000):
       beta = lin.gradient_log(beta, 1.5, training_set, training_set_y)
-    #   plt.scatter(n, cost_eq(training_set, training_set_y, np.dot(training_set,beta)), edgecolors="red", c = "none")
-    # plt.show()
-    print(lin.cost_log(training_set,training_set_y,beta))
     print("Alpha =", 0.2, "N =", n+1)
-    
+
     print("Round:", i+1)
     print("Training errors:", lin.training_errors(training_set, beta, training_set_y))
     print("Training accuracy =", (len(training_set)-lin.training_errors(training_set, beta, training_set_y))/len(training_set))

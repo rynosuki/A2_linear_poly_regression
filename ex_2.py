@@ -40,34 +40,3 @@ print(np.dot([1, 47, 47**2, 47**3, 47**4],beta))
 # He bought at index 568 and would now be worth 797
 # print(2.3e+6*(798/568))
 # The house would be worth 3.231 million SEK in 2022
-
-
-#### Calculations with gradient.
-values = []
-Xn = lin.normalize_eq(X)
-print("Normalized mean:", np.mean(Xn), "Non-normalized: ",np.mean(X))
-print("Normalized STD:", np.std(Xn), "Non-normalized:", np.std(X))
-polys = [np.c_[np.ones((len(Xn), 1)), Xn],np.c_[np.ones((len(Xn), 1)), Xn**1, Xn**2], 
-          np.c_[np.ones((len(Xn), 1)), Xn**1, Xn**2, Xn**3], np.c_[np.ones((len(Xn), 1)), Xn**1, Xn**2, Xn**3, Xn**4]]
-x3 = np.c_[np.ones((len(X), 1)), X**1, X**2, X**3, X**4]
-beta = np.zeros(polys[0].shape[1])
-for n in range(50):
-  beta = lin.gradient_lin(polys[0], beta, y, 0.003)
-  values.append(lin.cost_lin(polys[0], beta, y))
-beta = np.zeros(polys[1].shape[1])
-for n in range(50):
-  beta = lin.gradient_lin(polys[1], beta, y, 0.015)
-  values.append(lin.cost_lin(polys[1], beta, y))
-beta = np.zeros(polys[2].shape[1])
-for n in range(250):
-  beta = lin.gradient_lin(polys[2], beta, y, 0.0095)
-  values.append(lin.cost_lin(polys[2], beta, y))
-beta = np.zeros(polys[3].shape[1])
-for n in range(250):
-  beta = lin.gradient_lin(polys[3], beta, y, 0.0041)
-  values.append(lin.cost_lin(polys[3], beta, y))
-  
-print("For d:1 alpha =", 0.003, "with n of", 50, "value:", values[0])
-print("For d:2 alpha =", 0.0015, "with n of", 50, "value:", values[1])
-print("For d:3 alpha =", 0.0095, "with n of", 250, "value:", values[2])
-print("For d:4 alpha =", 0.0041, "with n of", 250, "value:", values[3])

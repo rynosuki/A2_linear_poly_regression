@@ -1,4 +1,3 @@
-from tkinter import ON
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,24 +6,25 @@ from numba import njit
 def cost_log(X, y, beta):
   return - (1/len(X)*(y.T.dot(np.log(sigmoid_log(np.dot(X, beta)))) + (1-y).T.dot(np.log(1-sigmoid_log(np.dot(X, beta))))))
 
-def cost_lin(X, beta, y):
+def cost_lin(X, y, beta):
   return ((np.dot(X,beta)- y).T.dot(np.dot(X,beta) - y))/len(X)
 
-def gradient_log(beta, alpha, X, y):
+def gradient_log(X, beta, y, alpha):
   return beta - (alpha / len(X))*(X.T).dot(sigmoid_log(np.dot(X, beta)) - y)
 
-def gradient_lin(beta, alpha, X, y):
+def gradient_lin(X, beta, y, alpha):
   return beta - np.dot(alpha,X.T).dot(np.dot(X,beta) - y)
 
 def sigmoid_log(z):
   return 1/(1 + np.exp(-z))
 
-def normalize_eq(X, x = None):
-  if x == None:
-    x = X
-  mu = np.mean(x)
-  sigma = np.std(x)
-  return (X - mu) / sigma
+def normalize_eq(X):
+  Xn = []
+  for i in range(X.shape[1]):
+    mu = np.mean(X[:,i])
+    sigma = np.std(X[:,i])
+    Xn.append((X[:,i] - mu) / sigma)
+  return np.array(Xn).T
 
 def mse(pred_y, y):
   return ((pred_y - y)**2).mean()

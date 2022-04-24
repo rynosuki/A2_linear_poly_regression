@@ -36,7 +36,7 @@ def main():
 def calc_gradient(X, y, beta, n, alpha, plot):
   values = []
   for i in range(n):
-    beta = lin.gradient_log(beta, alpha, X, y)
+    beta = lin.gradient_log(X, beta, y, alpha)
     values.append(lin.cost_log(X,y,beta))
   plot.plot(range(n), values, "ro")
   return beta

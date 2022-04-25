@@ -8,27 +8,18 @@ def main():
   X1 = data[:,0]
   X2 = data[:,1]
   y = data[:,2]
-  # plt.scatter(X1, X2, c = y)
-  # plt.show()
-  X = lin.mapFeature(X1, X2, 2)
-  beta = np.array([0,0,0,0,0,0])
-  
-  fig, (ax1,ax2) = plt.subplots(1,2)
-  alpha = 5
-  beta = calc_gradient(X, y, beta, 10000, alpha, ax1)
-  
-  lin.plot_grid(X1, X2, beta, y, 2, ax2)
+  plt.scatter(X1, X2, c = y)
   plt.show()
-  print("alpha:", alpha, "N:", 10000)
-  print("Training errors:", lin.training_errors(X, beta, y))
-  
-  X = lin.mapFeature(X1, X2, 5)
+  task(X1, X2, y, 2, 5)
+  task(X1, X2, y, 5, 15)
+
+def task(X1, X2, y, poly, alpha):
+  X = lin.mapFeature(X1, X2, poly)
   beta = np.array(np.zeros(X.shape[1]))
-  
   fig, (ax1,ax2) = plt.subplots(1,2)
-  alpha = 15
   beta = calc_gradient(X, y, beta, 100000, alpha, ax1)
-  lin.plot_grid(X1, X2, beta, y, 5, ax2)
+  lin.plot_grid(X1, X2, beta, y, poly, ax2)
+  plt.title("Errors: " + str(lin.training_errors(X, beta, y)))
   plt.show()
   print("alpha:", alpha, "N:", 100000)
   print("Training errors:", lin.training_errors(X, beta, y))

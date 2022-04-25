@@ -16,17 +16,16 @@ def main():
     test_set_y = y[500:]
     # I allocated approximately 75% for training and 25% for testing.
     
-    training_set = lin.normalize_eq(training_set)
+    training_set = lin.normalize_eq(training_set, training_set)
     training_set = np.c_[np.ones([len(training_set),1]), training_set]
-    test_set = lin.normalize_eq(test_set)
+    test_set = lin.normalize_eq(test_set, test_set)
     test_set = np.c_[np.ones([len(test_set),1]), test_set]
     beta = np.array([0,0,0,0,0,0,0,0,0,0])
     
-    # plt.plot(training_set[:,:9], training_set_y, "ro")
-    # plt.show()
-    
     for n in range(10000):
-      beta = lin.gradient_log(beta, 1.5, training_set, training_set_y)
+      beta = lin.gradient_log(training_set, beta, training_set_y, 0.2)
+      plt.plot(n, lin.cost_log(training_set, training_set_y, beta), "ro")
+    plt.show()
     print("Alpha =", 0.2, "N =", n+1)
 
     print("Round:", i+1)

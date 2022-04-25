@@ -18,11 +18,11 @@ def gradient_lin(X, beta, y, alpha):
 def sigmoid_log(z):
   return 1/(1 + np.exp(-z))
 
-def normalize_eq(X):
+def normalize_eq(X, x):
   Xn = []
   for i in range(X.shape[1]):
-    mu = np.mean(X[:,i])
-    sigma = np.std(X[:,i])
+    mu = np.mean(x[:,i])
+    sigma = np.std(x[:,i])
     Xn.append((X[:,i] - mu) / sigma)
   return np.array(Xn).T
 
